@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: mariadb:latest
+    volumes:
+      - ./mariadb_data:/var/lib/mysql  # 数据库文件保存位置
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456      # 数据库密码（可自定义）
+      MYSQL_DATABASE: instockdb        # 数据库名必须为instockdb
+    ports:
+      - "3306:3306"
+  app:
+    image: mayanghua/instock:latest
+    depends_on:
+      - db
+    environment:
+      db_host: db                     # 数据库容器名称
+      db_user: root                   # 数据库账号
+      db_password: 123456             # 与上方密码一致
+      db_database: instockdb          # 与上方数据库名一致
+      db_port: 3306
+    ports:
+      - "9988:9988"                   # 网页访问端口
